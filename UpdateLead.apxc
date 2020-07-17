@@ -1,0 +1,22 @@
+global class UpdateLead implements 
+Database.Batchable<sObject> {
+
+    global database.QueryLocator start(Database.BatchableContext bc){
+        return database.getQueryLocator('SELECT ID, Country, City from Lead where Country = \'US\' and City = \'New York\'');
+    }
+    global void execute (database.BatchableContext bc, list<lead> scope){
+        list<Lead> leads= new list<Lead>();
+        for (lead lea: scope){
+            lea.LeadSource ='Web';
+            lea.Rating ='Hot';
+            
+            leads.add(lea);
+        }
+        update leads;
+    }
+    global void finish(database.BatchableContext bc){
+        AsyncApexJob job = [SELECT Id, Status, NumberOfErrors, JobItemsProcessed,TotalJobItems, CreatedBy.Email
+                            FROM AsyncApexJob WHERE Id = :bc.getJobId()];
+        system.debug('job');
+    }
+}
