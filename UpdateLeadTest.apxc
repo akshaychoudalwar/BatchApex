@@ -1,0 +1,21 @@
+@isTest
+public class UpdateLeadTest {
+    @testSetup
+    Static void setup(){
+        list<Lead> leadlist =new list<Lead>();
+        for(Integer i=0; i<10; i++){
+            leadlist.add(new Lead(LastName='test '+i,
+                                  Country='US', City='New York',
+                                  Company='tata', Status='Open - Not Contacted'));
+            
+        }
+        insert leadlist;
+    } 
+    Static testMethod void testlead(){
+        test.startTest();
+        UpdateLead ul=new UpdateLead();
+        id batchid= database.executeBatch(ul);
+        test.stopTest();
+        system.assertEquals(10,[select count() from lead where LeadSource ='Web' and Rating='Hot']);
+    }
+}
